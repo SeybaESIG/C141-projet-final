@@ -66,25 +66,21 @@ export const useAeroportStore = defineStore('aeroport', {
     },
 
     async fetchAeroports() {
-      const apiKey = import.meta.env.VITE_AIRLABS_API_KEY
-
-      if (!apiKey) {
-        this.error = 'Clé API manquante'
-        this.isLoading = false
-        return
-      }
-
       this.isLoading = true
       this.error = null
 
       try {
-        const response = await api.get('/airports', {
-          params: {
-            country_code: 'CH',
-            _fields: 'name,iata_code,icao_code,lat,lng',
-            api_key: apiKey,
-          },
-        })
+        const params = {
+          country_code: 'CH',
+          _fields: 'name,iata_code,icao_code,lat,lng',
+        }
+
+        const publicApiKey = import.meta.env.VITE_AIRLABS_API_KEY
+        if (publicApiKey) {
+          params.api_key = publicApiKey
+        }
+
+        const response = await api.get('/airports', { params })
 
         const data = response.data
         this.aeroports = (data.response || []).map((airport) => ({

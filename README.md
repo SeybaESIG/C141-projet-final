@@ -1,6 +1,6 @@
 # Encyclopedie des aeroports
 
-Application Vue 3 + Vuetify 3 + Pinia qui consomme l'API Airlabs pour afficher une liste d'aeroports suisses, une page detail et une gestion des favoris persistants.
+Application Vue 3 + Vuetify 3 + Pinia qui consomme l'API Airlabs via un proxy serverless pour afficher une liste d'aeroports suisses, une page detail et une gestion des favoris persistants.
 
 ## Fonctionnalites
 
@@ -36,10 +36,10 @@ Application disponible sur `http://localhost:3000`.
 
 ## Variables d'environnement
 
-Le projet utilise des variables Vite (prefixe `VITE_`) :
+Le projet utilise :
 
-- `VITE_API_URL` : base URL de l'API Airlabs
-- `VITE_AIRLABS_API_KEY` : cle API Airlabs
+- `VITE_API_URL` : base URL des appels frontend (par defaut `/api`)
+- `VITE_AIRLABS_API_KEY` : cle API Airlabs utilisee par la fonction serverless Vercel
 
 Voir `env.example` pour le template.
 
@@ -47,6 +47,8 @@ Voir `env.example` pour le template.
 
 ```text
 src/
+├── api/
+│   └── airports.js           # Proxy serverless Vercel vers Airlabs 
 ├── components/             # Composants reutilisables (header, footer, cards)
 ├── pages/                  # Pages routees (file-based routing)
 │   ├── index.vue
@@ -79,3 +81,4 @@ src/
 
 - Les favoris sont sauvegardes dans `localStorage` (cle `favorite-airports`).
 - Le detail aeroport affiche une iframe Google Maps basee sur `lat/lng` retournes par l'API Airlabs.
+- En production Vercel, configurer `VITE_AIRLABS_API_KEY` dans les Environment Variables.
