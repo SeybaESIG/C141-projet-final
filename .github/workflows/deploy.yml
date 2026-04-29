@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [solution]
+    branches: [main]
 
 permissions:
   contents: read
@@ -28,7 +28,7 @@ jobs:
 
       - run: npm run build
         env:
-          BASE_URL: /esig-141-demo-vuetify-api/
+          BASE_URL: /C141-projet-final/
 
       - uses: actions/upload-pages-artifact@v3
         with:
