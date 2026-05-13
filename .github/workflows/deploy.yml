@@ -29,6 +29,8 @@ jobs:
       - run: npm run build
         env:
           BASE_URL: /C141-projet-final/
+          VITE_API_URL: https://airlabs.co/api/v9
+          VITE_AIRLABS_API_KEY: ${{ secrets.VITE_AIRLABS_API_KEY }}
 
       - uses: actions/upload-pages-artifact@v3
         with:
