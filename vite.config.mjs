@@ -1,24 +1,24 @@
-// Plugins
+// Plugins Vite
 import VueRouter from 'unplugin-vue-router/vite'
 import Components from 'unplugin-vue-components/vite'
 import Vue from '@vitejs/plugin-vue'
 import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 import ViteFonts from 'unplugin-fonts/vite'
 
-// Utilities
+// Utilitaires
 import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
 
-// https://vitejs.dev/config/
+// Configuration principale Vite
 export default defineConfig({
   base: process.env.BASE_URL || '/',
   plugins: [
-    // File-based routing (must be before Vue)
+    // Routage basé sur les fichiers.
     VueRouter(),
     Vue({
       template: { transformAssetUrls }
     }),
-    // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#readme
+    // Intégration Vuetify + auto-import des composants.
     Vuetify(),
     Components(),
     ViteFonts({

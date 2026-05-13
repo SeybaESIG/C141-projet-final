@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <!-- Page statique de présentation du projet -->
     <h1 class="text-h3 text-center my-6">À propos</h1>
 
     <v-card max-width="900" class="mx-auto">

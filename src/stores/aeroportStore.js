@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import api from '@/plugins/axios'
 import { getCantonFromAirport } from '@/utils/cantons'
 
+// Évite les appels API en doublon quand plusieurs vues déclenchent un chargement simultanément.
 let loadInflight = null
 
 export const useAeroportStore = defineStore('aeroport', {

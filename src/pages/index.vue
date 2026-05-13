@@ -1,71 +1,98 @@
 <template>
-  <v-container>
-    <h1 class="text-h4 my-4">Liste des aéroports</h1>
+  <v-container class="py-6">
+    <div class="d-flex flex-column flex-md-row align-start align-md-center justify-space-between ga-3 mb-5">
+      <div>
+        <h1 class="text-h4 text-md-h3 font-weight-bold mb-1">Liste des aéroports</h1>
+        <p class="text-medium-emphasis">Recherchez, filtrez et ajoutez vos aéroports favoris.</p>
+      </div>
+      <div class="d-flex ga-2 flex-wrap">
+        <v-chip color="primary" variant="tonal" prepend-icon="mdi-airplane">
+          {{ aeroports.length }} aéroports
+        </v-chip>
+        <v-chip color="error" variant="tonal" prepend-icon="mdi-heart">
+          {{ aeroportStore.favorites.length }} favoris
+        </v-chip>
+      </div>
+    </div>
 
-    <v-row class="mb-4">
-      <v-col cols="12" md="5">
-        <v-text-field
-          v-model="search"
-          label="Rechercher un aéroport"
-          variant="outlined"
-          density="comfortable"
-          prepend-inner-icon="mdi-magnify"
-          clearable
-        />
-      </v-col>
-      <v-col cols="12" md="3">
-        <v-select
-          v-model="selectedCanton"
-          :items="cantonOptions"
-          item-title="label"
-          item-value="value"
-          label="Filtrer par canton"
-          variant="outlined"
-          density="comfortable"
-          hide-details
-        />
-      </v-col>
-      <v-col cols="12" md="4">
-        <v-select
-          v-model="sortOrder"
-          :items="sortOptions"
-          item-title="label"
-          item-value="value"
-          label="Trier"
-          variant="outlined"
-          density="comfortable"
-          hide-details
-        />
-      </v-col>
-    </v-row>
+    <v-sheet class="pa-4 pa-md-5 mb-6 filter-panel" border rounded="lg">
+      <v-row>
+        <v-col cols="12" md="5">
+          <v-text-field
+            v-model="search"
+            label="Rechercher un aéroport"
+            variant="outlined"
+            density="comfortable"
+            prepend-inner-icon="mdi-magnify"
+            clearable
+            hide-details
+          />
+        </v-col>
+        <v-col cols="12" md="3">
+          <v-select
+            v-model="selectedCanton"
+            :items="cantonOptions"
+            item-title="label"
+            item-value="value"
+            label="Filtrer par canton"
+            variant="outlined"
+            density="comfortable"
+            hide-details
+          />
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-select
+            v-model="sortOrder"
+            :items="sortOptions"
+            item-title="label"
+            item-value="value"
+            label="Trier"
+            variant="outlined"
+            density="comfortable"
+            hide-details
+          />
+        </v-col>
+      </v-row>
+    </v-sheet>
 
     <v-row v-if="isLoading">
       <v-col v-for="n in 8" :key="n" cols="12" sm="6" md="4" lg="3">
-        <v-skeleton-loader type="image, heading, text" />
+        <v-skeleton-loader class="rounded-lg" type="image, heading, text" />
       </v-col>
     </v-row>
 
-    <v-alert v-else-if="error" type="error" class="my-4">
+    <v-alert v-else-if="error" type="error" class="mb-4" variant="tonal">
       {{ error }}
     </v-alert>
 
-    <v-row v-else>
-      <v-col
+    <template v-else>
+      <v-alert
+        v-if="filteredAeroports.length === 0"
+        type="info"
+        variant="tonal"
+        class="mb-4"
+      >
+        Aucun aéroport ne correspond à vos critères.
+      </v-alert>
+
+      <v-row justify="center">
+        <v-col
           v-for="airport in filteredAeroports"
           :key="airport.icao_code || airport.iata_code || airport.name"
           cols="12"
           sm="6"
           md="4"
           lg="3"
-      >
-        <aeroport-card
-          :aeroport="airport"
-          :is-favorite="aeroportStore.isFavorite(airport)"
-          @toggle-favorite="aeroportStore.toggleFavorite"
-        />
-      </v-col>
-    </v-row>
-
+          class="d-flex justify-center"
+        >
+          <aeroport-card
+            :aeroport="airport"
+            :is-favorite="aeroportStore.isFavorite(airport)"
+            @toggle-favorite="aeroportStore.toggleFavorite"
+          />
+        </v-col>
+      </v-row>
+    </template>
   </v-container>
 </template>
 
@@ -85,6 +112,7 @@ const sortOptions = [
   { label: "Nom (Z -> A)", value: "name-desc" },
 ];
 
+// Garde uniquement les aéroports avec code IATA pour garantir des routes détail stables.
 const aeroports = computed(() =>
   aeroportsFromStore.value.filter((a) => Boolean(String(a.iata_code ?? "").trim()))
 );
@@ -124,3 +152,10 @@ const filteredAeroports = computed(() => {
     });
 });
 </script>
+
+<style scoped>
+.filter-panel {
+  background: rgba(var(--v-theme-surface), 0.75);
+  backdrop-filter: blur(6px);
+}
+</style>

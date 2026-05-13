@@ -11,7 +11,7 @@ const router = createRouter({
     routes,
 })
 
-// Workaround pour https://github.com/vitejs/vite/issues/11804
+// Recharge la page une fois pour forcer le chargement des bons fichiers, puis efface le marqueur.
 router.onError((err, to) => {
     if (err?.message?.includes?.('Failed to fetch dynamically imported module')) {
         if (!localStorage.getItem('vuetify:dynamic-reload')) {

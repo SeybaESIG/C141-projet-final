@@ -1,17 +1,15 @@
 /**
  * plugins/vuetify.js
  *
- * Framework documentation: https://vuetifyjs.com
+ * Documentation du framework: https://vuetifyjs.com
  */
 
-// Styles
 import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
 
-// Composables
 import { createVuetify } from 'vuetify'
 
-// https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
+// Définition du thème principal utilisé dans toute l'interface.
 export default createVuetify({
   theme: {
     defaultTheme: 'dark',

@@ -1,35 +1,59 @@
 <template>
-  <v-card class="h-100" hover :to="detailRoute">
-    <v-card-title>{{ aeroport.name }}</v-card-title>
-    <v-card-subtitle>
-      <span v-if="aeroport.iata_code">IATA: {{ aeroport.iata_code }}</span>
-      <span v-else>IATA: —</span>
-      <span class="mx-2">|</span>
-      <span v-if="aeroport.icao_code">ICAO: {{ aeroport.icao_code }}</span>
-      <span v-else>ICAO: —</span>
-    </v-card-subtitle>
+  <v-card class="airport-card h-100 d-flex flex-column" :to="detailRoute" rounded="xl" elevation="2">
+    <div class="airport-card__media">
+      <v-img
+        v-if="cantonFlagSrc"
+        :src="cantonFlagSrc"
+        :alt="`Drapeau du canton ${aeroport.canton?.name || ''}`"
+        class="airport-card__flag"
+        contain
+      />
+      <div v-else class="airport-card__flag airport-card__flag--fallback">
+        <v-icon size="40" icon="mdi-airplane" />
+      </div>
 
-    <v-card-text v-if="aeroport.canton" class="pt-2">
-      <div>
-        <div class="mb-2">Canton: {{ aeroport.canton.name }} ({{ aeroport.canton.code }})</div>
-        <v-img
-          v-if="cantonFlagSrc"
-          :src="cantonFlagSrc"
-          :alt="`Drapeau du canton ${aeroport.canton.name}`"
-          class="canton-flag-image"
-          contain
-        />
+      <v-chip
+        v-if="aeroport.canton?.code"
+        class="airport-card__chip"
+        color="primary"
+        size="small"
+        variant="elevated"
+      >
+        {{ aeroport.canton.code }}
+      </v-chip>
+    </div>
+
+    <v-card-item class="pb-2 airport-card__header">
+      <v-card-title class="airport-card__title">{{ aeroport.name }}</v-card-title>
+      <v-card-subtitle class="airport-card__subtitle">
+        {{ aeroport.canton?.name || "Canton inconnu" }}
+      </v-card-subtitle>
+    </v-card-item>
+
+    <v-card-text class="pt-0">
+      <div class="d-flex ga-2 flex-wrap airport-card__meta">
+        <v-chip size="small" variant="tonal" color="info">
+          IATA: {{ aeroport.iata_code || "—" }}
+        </v-chip>
+        <v-chip size="small" variant="tonal">
+          ICAO: {{ aeroport.icao_code || "—" }}
+        </v-chip>
       </div>
     </v-card-text>
 
-    <v-card-actions @click.stop @mousedown.stop>
+    <v-spacer />
+
+    <v-card-actions class="pt-0 airport-card__actions" @click.stop @mousedown.stop>
       <v-btn
         variant="text"
         color="error"
-        prepend-icon="mdi-heart"
+        :prepend-icon="isFavorite ? 'mdi-heart' : 'mdi-heart-outline'"
         @click.stop.prevent="onToggleFavorite"
       >
         {{ isFavorite ? "Retirer des favoris" : "Ajouter aux favoris" }}
+      </v-btn>
+      <v-btn variant="tonal" color="primary" class="airport-card__view-btn">
+        Voir
       </v-btn>
     </v-card-actions>
   </v-card>
@@ -62,6 +86,7 @@ const cantonFlagSrc = computed(() => {
 });
 
 function onToggleFavorite(event) {
+  // Bloque la propagation de l'événement pour éviter des redirections inattendues. 
   event?.preventDefault();
   event?.stopPropagation();
   emit("toggle-favorite", props.aeroport);
@@ -69,12 +94,72 @@ function onToggleFavorite(event) {
 </script>
 
 <style scoped>
-.canton-flag-image {
-  width: 100%;
-  max-width: 220px;
-  height: 140px;
+.airport-card {
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.airport-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(var(--v-theme-primary), 0.4);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.28) !important;
+}
+
+.airport-card__media {
+  position: relative;
+  height: 160px;
   background-color: rgb(var(--v-theme-surface));
-  border: 1px solid rgba(0, 0, 0, 0.25);
-  border-radius: 8px;
+}
+
+.airport-card__flag {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.airport-card__flag--fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.airport-card__chip {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-weight: 700;
+}
+
+.airport-card__title {
+  line-height: 1.3;
+  font-size: 1.05rem;
+  text-align: center;
+}
+
+.airport-card__subtitle {
+  opacity: 0.9;
+  text-align: center;
+}
+
+.airport-card__header :deep(.v-card-item__content) {
+  text-align: center;
+}
+
+.airport-card__meta {
+  justify-content: center;
+}
+
+.airport-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: 8px;
+  row-gap: 8px;
+}
+
+.airport-card__view-btn {
+  min-width: 76px;
 }
 </style>

@@ -18,6 +18,7 @@ const IATA_TO_CANTON = {
   ZRH: { code: "ZH", name: "Zurich" },
 };
 
+// Charge les drapeaux cantonaux à la compilation (mapping code -> URL d'asset).
 const cantonFlagFiles = import.meta.glob("../assets/cantons/*", {
   eager: true,
   import: "default",
@@ -39,7 +40,5 @@ export function getCantonFromAirport(airport) {
 export function getCantonFlagSrc(code) {
   const normalizedCode = String(code ?? "").trim().toUpperCase();
   if (!normalizedCode) return "";
-  if (CANTON_CODE_TO_FLAG_SRC[normalizedCode]) return CANTON_CODE_TO_FLAG_SRC[normalizedCode];
-  if (normalizedCode === "ZH" && CANTON_CODE_TO_FLAG_SRC.ZU) return CANTON_CODE_TO_FLAG_SRC.ZU;
-  return "";
+  return CANTON_CODE_TO_FLAG_SRC[normalizedCode] ?? "";
 }

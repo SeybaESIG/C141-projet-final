@@ -144,6 +144,7 @@ const showNotFound = computed(() => {
 const cantonFlagSrc = computed(() => getCantonFlagSrc(aeroport.value?.canton?.code))
 
 const googleMapsEmbedUrl = computed(() => {
+  // Affiche la carte uniquement si les coordonnées sont valides.
   const lat = Number(aeroport.value?.lat)
   const lng = Number(aeroport.value?.lng)
   if (!Number.isFinite(lat) || !Number.isFinite(lng)) return ""
