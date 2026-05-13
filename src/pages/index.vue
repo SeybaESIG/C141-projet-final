@@ -28,6 +28,7 @@
             hide-details
           />
         </v-col>
+
         <v-col cols="12" md="3">
           <v-select
             v-model="selectedCanton"
@@ -40,6 +41,7 @@
             hide-details
           />
         </v-col>
+
         <v-col cols="12" md="4">
           <v-select
             v-model="sortOrder"
@@ -52,6 +54,7 @@
             hide-details
           />
         </v-col>
+
       </v-row>
     </v-sheet>
 
@@ -112,7 +115,7 @@ const sortOptions = [
   { label: "Nom (Z -> A)", value: "name-desc" },
 ];
 
-// Garde uniquement les aéroports avec code IATA pour garantir des routes détail stables.
+// Garde uniquement les aéroports avec code IATA.
 const aeroports = computed(() =>
   aeroportsFromStore.value.filter((a) => Boolean(String(a.iata_code ?? "").trim()))
 );

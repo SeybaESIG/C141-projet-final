@@ -39,7 +39,7 @@
           {{ aeroport.name }}
         </v-card-title>
         <v-card-subtitle>
-          Fiche detaillee de l'aeroport
+          Fiche detaillée de l'aéroport
         </v-card-subtitle>
       </v-card-item>
 
@@ -60,7 +60,7 @@
 
             <v-card variant="tonal" class="mt-4 info-box">
               <v-card-text>
-                <div class="text-subtitle-2 mb-1">Coordonnees</div>
+                <div class="text-subtitle-2 mb-1">Coordonnées</div>
                 <div><strong>Latitude :</strong> {{ displayCoord(aeroport.lat) }}</div>
                 <div><strong>Longitude :</strong> {{ displayCoord(aeroport.lng) }}</div>
               </v-card-text>
@@ -84,7 +84,7 @@
               </v-card-text>
               <v-card-text v-else>
                 <v-alert type="info" variant="tonal" density="comfortable">
-                  Canton non disponible pour cet aeroport.
+                  Canton non disponible pour cet aéroport.
                 </v-alert>
               </v-card-text>
             </v-card>
@@ -103,7 +103,7 @@
               />
               <v-card-text v-else>
                 <v-alert type="info" variant="tonal">
-                  Localisation indisponible pour cet aeroport.
+                  Localisation indisponible pour cet aéroport.
                 </v-alert>
               </v-card-text>
             </v-card>
@@ -136,11 +136,13 @@ const aeroport = computed(() => {
   return aeroportStore.getAeroportByCode(routeCode.value)
 })
 
+// Affiche un message "not found" si le code est vide ou si aucun aéroport ne correspond, mais pas pendant le chargement ou en cas d'erreur.
 const showNotFound = computed(() => {
   if (isLoading.value || error.value) return false
   if (!routeCode.value) return true
   return !aeroport.value
 })
+
 const cantonFlagSrc = computed(() => getCantonFlagSrc(aeroport.value?.canton?.code))
 
 const googleMapsEmbedUrl = computed(() => {

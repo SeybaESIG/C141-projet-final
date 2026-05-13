@@ -42,7 +42,7 @@
     </v-dialog>
 
     <v-snackbar v-model="snackbar.show" :timeout="2200" color="success">
-      {{ snackbar.text }}
+      <div class="text-center w-100">{{ snackbar.text }}</div>
     </v-snackbar>
   </v-container>
 </template>
@@ -67,14 +67,14 @@ const favoriteAeroports = computed(() => {
 
 function handleToggleFavorite(airport) {
   aeroportStore.toggleFavorite(airport);
-  snackbar.text = "Favori mis à jour";
+  snackbar.text = "Favori mis à jour.";
   snackbar.show = true;
 }
 
 function clearAllFavorites() {
   aeroportStore.clearFavorites();
   showClearDialog.value = false;
-  snackbar.text = "Tous les favoris ont été supprimés";
+  snackbar.text = "Tous les favoris ont été supprimés.";
   snackbar.show = true;
 }
 </script>

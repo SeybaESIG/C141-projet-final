@@ -1,6 +1,6 @@
-# Encyclopedie des aeroports
+# Encyclopédie des aéroports suisses 
 
-Application Vue 3 + Vuetify 3 + Pinia qui consomme l'API Airlabs via un proxy serverless pour afficher une liste d'aeroports suisses, une page detail et une gestion des favoris persistants.
+Application Vue 3 + Vuetify 3 + Pinia qui consomme l'API Airlabs pour afficher une liste d'aeroports suisses, une page détail et une gestion des favoris persistants.
 
 ## Fonctionnalites
 
@@ -39,36 +39,46 @@ Application disponible sur `http://localhost:3000`.
 Le projet utilise :
 
 - `VITE_API_URL` : base URL des appels frontend (par defaut `/api`)
-- `VITE_AIRLABS_API_KEY` : cle API Airlabs utilisee par la fonction serverless Vercel
+- `VITE_AIRLABS_API_KEY` : cle API Airlabs 
 
 Voir `env.example` pour le template.
 
 ## Structure du projet
 
 ```text
-src/
+.
 ├── api/
-│   └── airports.js           # Proxy serverless Vercel vers Airlabs 
-├── components/             # Composants reutilisables (header, footer, cards)
-├── pages/                  # Pages routees (file-based routing)
-│   ├── index.vue
-│   ├── aeroport/[id].vue
-│   ├── favoris.vue
-│   └── a-propos.vue
-├── assets/
-│   └── cantons/            # Drapeaux des cantons suisses (svg/png)
-├── utils/
-│   └── cantons.js          # Mapping aeroport -> canton + resolution image drapeau
-├── views/                  # Dossier present pour la structure demandee
-├── stores/
-│   └── aeroportStore.js    # State, getters, actions (Pinia)
-├── plugins/
-│   ├── axios.js            # Configuration Axios (baseURL + headers)
-│   └── vuetify.js
-├── router/
-│   └── index.js
-├── App.vue
-└── main.js
+│   └── airports.js               # Proxy serverless Vercel vers Airlabs
+├── index.html                    # Point d'entree HTML (Vite)
+├── vite.config.mjs               # Configuration Vite (alias, plugins)
+├── env.example                   # Template des variables d'environnement
+└── src/
+    ├── App.vue                   # Composant racine
+    ├── main.js                   # Bootstrap Vue (Pinia, Router, Vuetify)
+    ├── assets/
+    │   ├── airplane.png
+    │   └── cantons/              # Drapeaux des cantons suisses (svg/png)
+    ├── components/               # Composants reutilisables
+    │   ├── AeroportCard.vue
+    │   ├── AppHeader.vue
+    │   └── AppFooter.vue
+    ├── pages/                    # Pages routees (file-based routing)
+    │   ├── index.vue
+    │   ├── aeroport/
+    │   │   └── [id].vue
+    │   ├── favoris.vue
+    │   └── a-propos.vue
+    ├── router/
+    │   └── index.js              # Router (auto-genere depuis src/pages)
+    ├── stores/
+    │   ├── index.js              # Instance Pinia
+    │   └── aeroportStore.js      # State, getters, actions (Pinia)
+    ├── plugins/
+    │   ├── index.js              # Enregistrement global des plugins
+    │   ├── axios.js              # Configuration Axios (baseURL + headers)
+    │   └── vuetify.js            # Configuration Vuetify (theme, icones)
+    └── utils/
+        └── cantons.js            # Mapping aeroport -> canton + resolution drapeau
 ```
 
 ## Scripts
@@ -80,5 +90,5 @@ src/
 ## Notes
 
 - Les favoris sont sauvegardes dans `localStorage` (cle `favorite-airports`).
-- Le detail aeroport affiche une iframe Google Maps basee sur `lat/lng` retournes par l'API Airlabs.
+- Le detail aéroport affiche une iframe Google Maps basee sur `lat/lng` retournés par l'API Airlabs.
 - En production Vercel, configurer `VITE_AIRLABS_API_KEY` dans les Environment Variables.

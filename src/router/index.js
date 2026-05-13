@@ -11,7 +11,7 @@ const router = createRouter({
     routes,
 })
 
-// Recharge la page une fois pour forcer le chargement des bons fichiers, puis efface le marqueur.
+// Recharge la page une fois pour forcer le chargement des bons fichiers.
 router.onError((err, to) => {
     if (err?.message?.includes?.('Failed to fetch dynamically imported module')) {
         if (!localStorage.getItem('vuetify:dynamic-reload')) {
@@ -26,6 +26,7 @@ router.onError((err, to) => {
     }
 })
 
+// Efface le marqueur de rechargement une fois que le routeur est prêt.
 router.isReady().then(() => {
     localStorage.removeItem('vuetify:dynamic-reload')
 })

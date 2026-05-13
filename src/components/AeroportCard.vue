@@ -1,5 +1,14 @@
 <template>
-  <v-card class="airport-card h-100 d-flex flex-column" :to="detailRoute" rounded="xl" elevation="2">
+  <v-card
+    class="airport-card h-100 d-flex flex-column airport-card--clickable"
+    rounded="xl"
+    elevation="2"
+    role="button"
+    tabindex="0"
+    @click="goToDetail"
+    @keydown.enter.prevent="goToDetail"
+    @keydown.space.prevent="goToDetail"
+  >
     <div class="airport-card__media">
       <v-img
         v-if="cantonFlagSrc"
@@ -43,7 +52,7 @@
 
     <v-spacer />
 
-    <v-card-actions class="pt-0 airport-card__actions" @click.stop @mousedown.stop>
+    <v-card-actions class="pt-0 airport-card__actions">
       <v-btn
         variant="text"
         color="error"
@@ -61,8 +70,12 @@
 
 <script setup>
 import { computed } from "vue";
+import { useRouter } from "vue-router";
 import { getCantonFlagSrc } from "@/utils/cantons";
 
+const router = useRouter();
+
+// Props attendus par le composant AeroportCard
 const props = defineProps({
   aeroport: {
     type: Object,
@@ -76,10 +89,19 @@ const props = defineProps({
 
 const emit = defineEmits(["toggle-favorite"]);
 
+//  Récupère le code IATA ou ICAO de l'aeroport et encode l'URL pour le routage.
 const detailRoute = computed(() => {
   const code = String(props.aeroport.iata_code ?? "").trim();
   return code ? `/aeroport/${encodeURIComponent(code)}` : "/";
 });
+
+// Navigue vers la page de détail de l'aeroport.
+function goToDetail() {
+  const path = detailRoute.value;
+  if (path && path !== "/") {
+    router.push(path);
+  }
+}
 
 const cantonFlagSrc = computed(() => {
   return getCantonFlagSrc(props.aeroport.canton?.code);
@@ -104,6 +126,15 @@ function onToggleFavorite(event) {
   transform: translateY(-4px);
   border-color: rgba(var(--v-theme-primary), 0.4);
   box-shadow: 0 14px 32px rgba(0, 0, 0, 0.28) !important;
+}
+
+.airport-card--clickable {
+  cursor: pointer;
+}
+
+.airport-card--clickable:focus-visible {
+  outline: 2px solid rgb(var(--v-theme-primary));
+  outline-offset: 2px;
 }
 
 .airport-card__media {

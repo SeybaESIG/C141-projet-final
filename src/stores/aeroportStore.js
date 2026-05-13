@@ -36,6 +36,7 @@ export const useAeroportStore = defineStore('aeroport', {
   },
 
   actions: {
+    // Charge les favoris depuis le localStorage. Si une erreur survient, réinitialise à une liste vide.
     loadFavorites() {
       try {
         const raw = localStorage.getItem('favorite-airports')
@@ -49,6 +50,7 @@ export const useAeroportStore = defineStore('aeroport', {
       localStorage.setItem('favorite-airports', JSON.stringify(this.favorites))
     },
 
+    // Ajoute ou retire un aéroport des favoris.
     toggleFavorite(airport) {
       const code = String(airport?.iata_code ?? airport?.icao_code ?? '').trim().toUpperCase()
       if (!code) return
@@ -66,6 +68,7 @@ export const useAeroportStore = defineStore('aeroport', {
       this.saveFavorites()
     },
 
+    // Charge la liste des aéroports depuis l'API AirLabs.
     async fetchAeroports() {
       this.isLoading = true
       this.error = null
@@ -95,11 +98,13 @@ export const useAeroportStore = defineStore('aeroport', {
       }
     },
 
+    // Initialise le store en chargeant les favoris et la liste des aéroports.
     init() {
       this.loadFavorites()
       return this.ensureLoaded()
     },
 
+    // Garantit que les aéroports sont chargés avant de continuer. Si un chargement est déjà en cours, attend sa fin.
     ensureLoaded() {
       if (this.aeroports.length > 0) {
         this.isLoading = false

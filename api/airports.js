@@ -19,11 +19,12 @@ export default async function handler(req, res) {
     const response = await fetch(upstream)
     const payload = await response.json()
 
+    // L'API Airlabs peut retourner une erreur même avec un statut 200, donc on vérifie le champ "response" dans le payload.
     if (!response.ok) {
       return res.status(response.status).json(payload)
     }
-
     return res.status(200).json(payload)
+
   } catch {
     return res.status(502).json({ error: 'Failed to fetch Airlabs API' })
   }

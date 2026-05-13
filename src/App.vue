@@ -12,6 +12,7 @@
     <v-main>
       <RouterView />
     </v-main>
+
     <app-footer />
   </v-app>
 </template>

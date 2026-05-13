@@ -16,13 +16,11 @@ export default createVuetify({
     themes: {
       dark: {
         colors: {
-          primary: '#00B5CC',    // Bleu turquoise (portail, logo R&M)
-          secondary: '#97CE4C',  // Vert portail/slime
-          accent: '#F2E94E',     // Jaune (cheveux Morty)
-          error: '#E63946',      // Rouge (lasers, danger)
-          info: '#44CFCB',       // Cyan clair
-          success: '#97CE4C',    // Vert (même que secondary)
-          warning: '#FFA724',    // Orange
+          primary: '#00B5CC',    // Bleu turquoise 
+          secondary: '#97CE4C',  // Vert 
+          error: '#E63946',      // Rouge 
+          info: '#44CFCB',       // Cyan clair 
+          success: '#97CE4C',    // Vert 
         },
       },
     },
